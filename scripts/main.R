@@ -15,12 +15,32 @@ industry_counts <- billionaires %>%
   group_by(industry) %>%
   summarise(num_billionaires = n_distinct(full_name))
 
+
+# Create df for swiss billionaires (citizenship)
+
+swiss_billionaires <- billionaires %>%
+  filter(citizenship == "Switzerland")
+
+swiss_industry_counts <- swiss_billionaires %>%
+  group_by(industry) %>%
+  summarise(num_swiss_billionaires = n_distinct(full_name))
+
+
 # Create a bar plot with rotated x-axis labels
 
 ggplot(industry_counts, aes(x = reorder(industry, -num_billionaires), y = num_billionaires)) +
   geom_bar(stat = "identity") +
   labs(x = "Industry", y = "Number of Billionaires", title = "Distribution of Billionaires by Industry") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+
+# Create the same plot but only for Swiss billionaires
+
+ggplot(swiss_industry_counts, aes(x = reorder(industry, -num_swiss_billionaires), y = num_swiss_billionaires)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Industry", y = "Number of Billionaires", title = "Distribution of Billionaires by Industry") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
 
 # Save the plot
 
