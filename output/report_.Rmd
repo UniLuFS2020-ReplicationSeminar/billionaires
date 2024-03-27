@@ -5,11 +5,19 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-####Interduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(tidyverse)
+```
+
+
+###Interduction
 
 This report aims to answer the following research question:
 
-Did countries with a higher proportion of billionaires have a     higher GDP growth rate in the early 21th century?
+Did countries with a higher proportion of billionaires have a higher GDP growth rate in the early 21th century?
 
 
 
@@ -19,11 +27,11 @@ billionaires_data <- readRDS(here("data", "re_data.rds"))
 
 
 
-####Methods
+###Methods
 
 
-####Results
+###Results
 
 
-####Discussion
+###Discussion
 
