@@ -13,7 +13,7 @@ library(tidyverse)
 ```
 
 
-###Interduction
+### Interduction
 
 This report aims to answer the following research question:
 
@@ -27,11 +27,11 @@ billionaires_data <- readRDS(here("data", "re_data.rds"))
 
 
 
-###Methods
+### Methods
 
 
-###Results
+### Results
 
 
-###Discussion
+### Discussion
 
