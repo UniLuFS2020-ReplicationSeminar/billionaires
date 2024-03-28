@@ -45,10 +45,15 @@ GDP_ready_join <- GDP_data %>%
   rename(country_of_residence = Entity)
 
 
-# Join the data  
+# Join the data 
 
 re_data <- left_join(billionaires, GDP_ready_join, by = "country_of_residence")
 
-saveRDS(re_data, here("data", "re_data.rds"))
+#saveRDS(re_data, here("data", "re_data.rds"))
+
+# save the data as a csv file, as working with .rds was not possible. 
+
+write_csv(re_data, here("data", "re_data.csv"))
+
         
         
