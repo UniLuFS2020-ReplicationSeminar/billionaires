@@ -19,7 +19,16 @@ This report aims to answer the following research question:
 Did countries with a higher proportion of billionaires have a higher GDP growth rate in the early 21th century?
 
 ```{r}
+# Create df with billionaires data
+
 billionaires_data <- readRDS(here("data", "re_data.rds"))
+
+# aggregate the number of billionaires by country and assign it to object billionaires_by_country
+
+billionaires_by_country <- billionaires %>%
+  group_by(country_of_residence) %>%
+  summarise(num_billionaires = n_distinct(full_name))
+
 ```
 
 ## Hypothesis
@@ -27,6 +36,17 @@ billionaires_data <- readRDS(here("data", "re_data.rds"))
 We hypothesise that countries with a higher proportion of billionaires don't have a higher GDP growth rate in the early 21th century. And if they do, we suspect a causation instead of a causality.
 
 ### Methods
+
+We start off by loading the data and then we will aggregate the data to count the number of billionaires by industry.
+
+```{r}
+
+ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
+  geom_point(aes(size = gdp_country), color = "blue") +
+  labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
 
 ### Results
 
