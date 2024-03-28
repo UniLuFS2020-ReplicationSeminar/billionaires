@@ -83,7 +83,7 @@ gdp_growth_df <- here("data_prep", "GDP_growth.csv") %>%
 gdp_growth_2021 <- gdp_growth_df %>%
   filter(Year == 2021)
 
-#rename column Entity to country_of_residence
+#rename column Entity and 17.13.1 - Annual GDP growth (%) - NY_GDP_MKTP_KD_ZG
 
 gdp_growth_2021 <- gdp_growth_2021 %>%
   rename(country_of_residence = Entity) %>%
@@ -104,7 +104,7 @@ ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_b
 # remove the NA from the dataset
 
 billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
-  drop_na(gdp_country)
+  drop_na()
 
 ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
   geom_point(aes(color = gdp_growth_country), size = 3) +
@@ -113,7 +113,7 @@ ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_b
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Calculate correlation
-corr_billionaires_by_country_gdp <- cor(billionaires_by_country_gdp$num_billionaires, billionaires_by_country_gdp$gdp_country)
+corr_billionaires_by_country_gdp <- cor(billionaires_by_country_gdp$num_billionaires, billionaires_by_country_gdp$gdp_growt_country)
 
 print(corr_billionaires_by_country_gdp)
 
