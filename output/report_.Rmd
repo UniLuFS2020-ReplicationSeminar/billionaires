@@ -12,26 +12,34 @@ library(here)
 library(tidyverse)
 ```
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e219ef1110b9c2b24383c4c36f8252d7ba3235e7
 ### Interduction
 
 This report aims to answer the following research question:
 
 Did countries with a higher proportion of billionaires have a higher GDP growth rate in the early 21th century?
 
-
-
 ```{r}
 billionaires_data <- readRDS(here("data", "re_data.rds"))
 ```
 
+## Hypothesis
 
+We hypothesise that countries with a higher proportion of billionaires don't have a higher GDP growth rate in the early 21th century. And if they do, we suspect a causation instead of a causality.
 
 ### Methods
 
+### Results
 
+<<<<<<< HEAD
 ### Results
 
 
 ### Discussion
 
+=======
+### Discussion
+>>>>>>> e219ef1110b9c2b24383c4c36f8252d7ba3235e7

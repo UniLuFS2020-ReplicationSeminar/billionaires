@@ -1,10 +1,10 @@
 
-# This script reads the data from the data_prep folder and loads it into the R environment.
+# This script reads the data from the data_prep folder and gives the data in to the data folder.
 
 library(tidyverse)
 library(here)
 library(readr)
-library(ggplot2)
+library(ggplot2)gut
 
 
 # Read the data from the data_prep folder
@@ -49,6 +49,6 @@ GDP_ready_join <- GDP_data %>%
 
 re_data <- left_join(billionaires, GDP_ready_join, by = "country_of_residence")
 
-saveRDS(re_data, here("data", "re_data.rds"))
+write.csv(re_data, here("data", "re_data.rds"))
         
         

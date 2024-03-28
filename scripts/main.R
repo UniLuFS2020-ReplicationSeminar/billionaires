@@ -50,11 +50,54 @@ ggplot(swiss_industry_counts, aes(x = reorder(industry, -num_swiss_billionaires)
 
 ggsave(here("output", "swiss_billionaires_by_industry.png"))
 
+# commenting out the code below
 
 # create a Plot comparing the wealth of billionaires by the tax rate of their country
 
-ggplot(billionaires, aes(x = tax_rate, y = wealth, color = country_lat)) +
-  geom_point() +
-  labs(x = "Tax Rate", y = "Wealth", title = "Wealth of Billionaires by Tax Rate") +
-  theme(legend.position = "bottom")
+#ggplot(billionaires, aes(x = tax_rate, y = wealth, color = country_lat)) +
+  #geom_point() +
+  #labs(x = "Tax Rate", y = "Wealth", title = "Wealth of Billionaires by Tax Rate") +
+  #theme(legend.position = "bottom")
+
+# create a plot comparing the number of billionaires per country with the gdp of each country
+
+# aggregate the number of billionaires by country and assign it to object billionaires_by_country
+
+billionaires_by_country <- billionaires %>%
+  group_by(country_of_residence) %>%
+  summarise(num_billionaires = n_distinct(full_name))
+
+# create a dataframe with the gdp of each country in the billionaires dataframe
+
+gdp_data <- data.frame(
+  country_of_residence = c("United States", "China", "Germany", "India", "Russia", "Switzerland", "Brazil", "Hong Kong", "United Kingdom", "Italy"),
+  gdp_country = c(65297, 10700, 4470, 2350, 1283, 678, 2140, 364, 2910, 2080)
+)
+
+# compare the number of billionaires by country with the gdp of each country
+
+billionaires_by_country_gdp <- billionaires_by_country %>%
+  left_join(gdp_data, by = "country_of_residence")
+
+# create a regression plot comparing the gdp of each country with the number of billionaires. the x axis should state each country's name, the names should be rotated, so the plot is readable. 
+
+ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
+  geom_point(aes(size = gdp_country), color = "blue") +
+  labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# remove the NA from the dataset
+
+billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
+  drop_na(gdp_country)
+
+ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
+  geom_point(aes(size = gdp_country), color = "blue") +
+  labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# save the plot in output folder
+
+ggsave(here("output", "gdp_vs_num_billionaires.png"))
 
