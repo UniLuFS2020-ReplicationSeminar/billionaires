@@ -19,7 +19,7 @@ This report aims to answer the following research question:
 Did countries with a higher proportion of billionaires have a higher GDP growth rate in the early 21th century?
 
 ```{r}
-# Create df with billionaires data
+# load billionaires dataset
 
 billionaires <- here("data_prep", "df_ready.csv") %>%
   read_csv()
@@ -31,6 +31,9 @@ billionaires_by_country <- billionaires %>%
   summarise(num_billionaires = n_distinct(full_name))
 
 
+# Load the gdp dataset
+gdp_growth_df <- here("data_prep", "GDP_growth.csv") %>%
+  read_csv()
 
 ```
 
