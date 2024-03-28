@@ -86,6 +86,17 @@ ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_b
   labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+# remove the NA from the dataset
+
+billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
+  drop_na(gdp_country)
+
+ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
+  geom_point(aes(size = gdp_country), color = "blue") +
+  labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 # save the plot in output folder
 
 ggsave(here("output", "gdp_vs_num_billionaires.png"))
