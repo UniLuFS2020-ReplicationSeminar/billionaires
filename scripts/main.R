@@ -74,6 +74,13 @@ gdp_data <- data.frame(
   gdp_country = c(65297, 10700, 4470, 2350, 1283, 678, 2140, 364, 2910, 2080)
 )
 
+## We should definitely use the csv datafile for the gdp
+
+GDP_Growth <- read.csv(here("data_prep", "GDP_growth.csv")
+                       
+gdp_growth_df <- here("data_prep", "GDP_growth.csv") %>%
+  read_csv()
+
 # compare the number of billionaires by country with the gdp of each country
 
 billionaires_by_country_gdp <- billionaires_by_country %>%
@@ -95,6 +102,12 @@ ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_b
   geom_point(aes(size = gdp_country), color = "blue") +
   labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# Calculate correlation
+corr_billionaires_by_country_gdp <- cor(billionaires_by_country_gdp$num_billionaires, billionaires_by_country_gdp$gdp_country)
+
+print(corr_billionaires_by_country_gdp)
 
 
 # save the plot in output folder
