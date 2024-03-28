@@ -2,6 +2,7 @@ library(tidyverse)
 library(here)
 library(readr)
 library(ggplot2)
+library(dplyr)
 
 
 # Load data using here
@@ -74,17 +75,23 @@ gdp_data <- data.frame(
   gdp_country = c(65297, 10700, 4470, 2350, 1283, 678, 2140, 364, 2910, 2080)
 )
 
-## We should definitely use the csv datafile for the gdp
-
-GDP_Growth <- read.csv(here("data_prep", "GDP_growth.csv")
-                       
+## We should definitely use all the data we have by using the csv datafile for the gdp
 gdp_growth_df <- here("data_prep", "GDP_growth.csv") %>%
   read_csv()
+
+# I suppose we only use the newest year (2021 for simplicity reasons)
+gdp_growth_2021 <- gdp_growth_df %>%
+  filter(Year == 2021)
+
+#rename column Entity to country_of_residence
+
+gdp_growth_2021 <- gdp_growth_2021 %>%
+  rename(country_of_residence = Entity)
 
 # compare the number of billionaires by country with the gdp of each country
 
 billionaires_by_country_gdp <- billionaires_by_country %>%
-  left_join(gdp_data, by = "country_of_residence")
+  left_join(gdp_growth_2021, by = "country_of_residence")
 
 # create a regression plot comparing the gdp of each country with the number of billionaires. the x axis should state each country's name, the names should be rotated, so the plot is readable. 
 

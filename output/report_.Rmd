@@ -21,13 +21,16 @@ Did countries with a higher proportion of billionaires have a higher GDP growth 
 ```{r}
 # Create df with billionaires data
 
-billionaires_data <- readRDS(here("data", "re_data.rds"))
+billionaires <- here("data_prep", "df_ready.csv") %>%
+  read_csv()
 
 # aggregate the number of billionaires by country and assign it to object billionaires_by_country
 
 billionaires_by_country <- billionaires %>%
   group_by(country_of_residence) %>%
   summarise(num_billionaires = n_distinct(full_name))
+
+
 
 ```
 
