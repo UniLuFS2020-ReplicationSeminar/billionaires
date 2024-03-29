@@ -18,8 +18,8 @@ library(ggplot2)
 library(dplyr)
 ```
 
-
 # 1 Introduction
+
 
 This report aims to answer the following research question:
 
@@ -100,3 +100,4 @@ The Data shows that the number of billionaires is not a significant predictor fo
 As suggested in the results section, the number of billionaires does not have a significant impact on the GDP growth rate of a country. Considering that the GDP growth rate is impacted by a multitude of different factors, it is not surprising that the number of billionaires alone does not explain the variation in GDP growth rates across countries.
 
 Various other factors such as the size of the economy, the political stability of the country, or the level of corruption could have a more significant impact on the GDP growth rate. It would also make sence to use a multi-variate regression model to account for the influence of other factors on the GDP growth rate. Further research is needed to explore the relationship between the number of billionaires and the GDP growth rate of a country.
+>>>>>>> 22951d371cd0b1c233a5f20048626d8eb74d098b
