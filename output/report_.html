@@ -11,9 +11,9 @@
 
 <meta name="author" content="Nils, Jan, Rakesh, Benjamin" />
 
-<meta name="date" content="2024-03-28" />
+<meta name="date" content="2024-03-29" />
 
-<title>Report: Data Mining</title>
+<title>CE 1: Billionaires and GDP</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,26 +350,109 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Report: Data Mining</h1>
+<h1 class="title toc-ignore">CE 1: Billionaires and GDP</h1>
 <h4 class="author">Nils, Jan, Rakesh, Benjamin</h4>
-<h4 class="date">2024-03-28</h4>
+<h4 class="date">2024-03-29</h4>
 
 </div>
 
 
-<p>###Interduction</p>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
 <p>This report aims to answer the following research question:</p>
 <p>Did countries with a higher proportion of billionaires have a higher
 GDP growth rate in the early 21th century?</p>
-<pre class="r"><code>billionaires_data &lt;- readRDS(here(&quot;data&quot;, &quot;re_data.rds&quot;))</code></pre>
-<p>##Hypothesis</p>
+</div>
+<div id="hypothesis" class="section level1">
+<h1>2 Hypothesis</h1>
 <p>We hypothesise that countries with a higher proportion of
 billionaires don’t have a higher GDP growth rate in the early 21th
 century. And if they do, we suspect a causation instead of a
 causality.</p>
-<p>###Methods</p>
-<p>###Results</p>
-<p>###Discussion</p>
+</div>
+<div id="code" class="section level1">
+<h1>3 Code</h1>
+<p>To answer we used the following code:</p>
+<div id="loading-cleaning-and-merging-the-datasets-gdp-and-billionaires" class="section level3">
+<h3>3.1 Loading, cleaning and merging the Datasets (GDP and
+Billionaires)</h3>
+<pre class="r"><code># load billionaires dataset
+billionaires &lt;- here(&quot;data_prep&quot;, &quot;df_ready.csv&quot;) %&gt;%
+  read_csv()
+
+# aggregate the number of billionaires by country and assign it to object billionaires_by_country
+billionaires_by_country &lt;- billionaires %&gt;%
+  group_by(country_of_residence) %&gt;%
+  summarise(num_billionaires = n_distinct(full_name))
+
+# Load the GDP dataset
+gdp_growth_df &lt;- here(&quot;data_prep&quot;, &quot;GDP_growth.csv&quot;) %&gt;%
+  read_csv()
+
+# Sort by year 2021
+gdp_growth_2021 &lt;- gdp_growth_df %&gt;%
+  filter(Year == 2021)
+
+#rename columns &quot;Entity&quot; and &quot;17.13.1 - Annual GDP growth (%) - NY_GDP_MKTP_KD_ZG&quot;
+gdp_growth_2021 &lt;- gdp_growth_2021 %&gt;%
+  rename(country_of_residence = Entity) %&gt;%
+  rename(gdp_growth_country = &quot;17.13.1 - Annual GDP growth (%) - NY_GDP_MKTP_KD_ZG&quot;)
+
+# merge the two dataframes
+billionaires_by_country_gdp &lt;- billionaires_by_country %&gt;%
+  left_join(gdp_growth_2021, by = &quot;country_of_residence&quot;)
+
+# remove the NA from the dataset
+billionaires_by_country_gdp &lt;- billionaires_by_country_gdp %&gt;%
+  drop_na()</code></pre>
+</div>
+<div id="create-a-graph" class="section level3">
+<h3>3.2 Create a Graph</h3>
+<pre class="r"><code># create a regression plot comparing the gdp of each country with the number of billionaires. On the x-axis are the countries, the y-axis shows the number of billionaires and the color of the points represents the GDP of the country.
+ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
+  geom_point(aes(color = gdp_growth_country), size = 3) +
+  scale_color_gradient2(low = &quot;red&quot;, mid = &quot;yellow&quot;, high = &quot;green&quot;, midpoint = 0) +
+  labs(x = &quot;Country&quot;, y = &quot;Number of Billionaires&quot;, title = &quot;Number of Billionaires by Country and GDP Growth&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# create a regression plot comparing the gdp of each country with the number of billionaires. On the x-axis are the GDP of the countries, the y-axis shows the number of billionaires and the color of the points represents the GDP growth rate of the country.
+ggplot(billionaires_by_country_gdp, aes(x = gdp_growth_country, y = num_billionaires)) +
+  geom_point(aes(color = gdp_growth_country), size = 3) +
+  scale_color_gradient2(low = &quot;red&quot;, mid = &quot;orange&quot;, high = &quot;green&quot;, midpoint = 0) +
+  labs(x = &quot;GDP Growth&quot;, y = &quot;Number of Billionaires&quot;, title = &quot;Number of Billionaires by Country and GDP Growth&quot;) +
+  theme(axis.text.x = element_text(hjust = 1))</code></pre>
+</div>
+<div id="run-a-regression-model" class="section level3">
+<h3>3.3 Run a regression model</h3>
+<pre class="r"><code># run a regression model
+Regression_billionaires_gdp &lt;- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
+summary(Regression_billionaires_gdp)</code></pre>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>4 Results</h1>
+<p>The Data shows that the number of billionaires is not a significant
+predictor for the GDP growth rate of a country. The p-value of the
+regression model is 0.652, which is higher than the significance level
+of 0.05. This means that the number of billionaires does not have a
+significant impact on the GDP growth rate of a country.</p>
+</div>
+<div id="discussion" class="section level1">
+<h1>5. Discussion</h1>
+<p>As suggested in the results section, the number of billionaires does
+not have a significant impact on the GDP growth rate of a country.
+Considering that the GDP growth rate is impacted by a multitude of
+different factors, it is not surprising that the number of billionaires
+alone does not explain the variation in GDP growth rates across
+countries.</p>
+<p>Various other factors such as the size of the economy, the political
+stability of the country, or the level of corruption could have a more
+significant impact on the GDP growth rate. It would also make sence to
+use a multi-variate regression model to account for the influence of
+other factors on the GDP growth rate. Further research is needed to
+explore the relationship between the number of billionaires and the GDP
+growth rate of a country.</p>
+</div>
 
 
 
