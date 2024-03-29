@@ -56,12 +56,15 @@ billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
   drop_na()
 
 # create a regression plot comparing the gdp of each country with the number of billionaires. the x axis should state each country's name, the names should be rotated, so the plot is readable.
-
 ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
   geom_point(aes(color = gdp_growth_country), size = 3) +
   scale_color_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 0) +
   labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# run a regression model
+Regression_billionaires_gdp <- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
+summary(Regression_billionaires_gdp)
         
 ```
 

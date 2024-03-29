@@ -121,10 +121,6 @@ ggplot(billionaires_by_country_gdp, aes(x = gdp_growth_country, y = num_billiona
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-# we want to check how the data is distributed:
-
-hist(billionaires_by_country_gdp$gdp_growth_country, main = "Histogram of GDP Growth", xlab = "GDP Growth")
-
 
 # Calculate correlation
 corr_billionaires_by_country_gdp <- cor.test(billionaires_by_country_gdp$num_billionaires, billionaires_by_country_gdp$gdp_growth_country, method = "pearson")
@@ -138,8 +134,8 @@ print(corr_billionaires_by_country_gdp)
 
 
 #running a regression modell
-Regression <- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
-summary(Regression)
+Regression_billionaires_gdp <- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
+summary(Regression_billionaires_gdp)
 
 # save the plot in output folder
 
