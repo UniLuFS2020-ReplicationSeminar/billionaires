@@ -2,7 +2,9 @@
 title: 'CE 1: Billionaires and GDP'
 author: "Nils, Jan, Rakesh, Benjamin"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -66,7 +68,7 @@ billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
 ```
 
 ### 3.2 Create a Graph
-```{r}
+```{r, eval=TRUE}
 # create a regression plot comparing the gdp of each country with the number of billionaires. On the x-axis are the countries, the y-axis shows the number of billionaires and the color of the points represents the GDP of the country.
 ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
   geom_point(aes(color = gdp_growth_country), size = 3) +
@@ -83,9 +85,10 @@ ggplot(billionaires_by_country_gdp, aes(x = gdp_growth_country, y = num_billiona
 ```
 
 ### 3.3 Run a regression model
-```{r}
+```{r, eval=TRUE}
 # run a regression model
 Regression_billionaires_gdp <- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
+
 summary(Regression_billionaires_gdp)
 ```
 
