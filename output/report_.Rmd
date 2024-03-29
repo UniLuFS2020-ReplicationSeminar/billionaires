@@ -1,18 +1,23 @@
 ---
-title: 'Report: Data Mining'
+title: 'CE 1: Billionaires and GDP'
 author: "Nils, Jan, Rakesh, Benjamin"
 date: "`r Sys.Date()`"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      eval = FALSE)
 
-library(here)
 library(tidyverse)
+library(here)
+library(readr)
+library(ggplot2)
+library(dplyr)
 ```
 
-### Introduction
+
+## Introduction
 
 This report aims to answer the following research question:
 
@@ -22,9 +27,11 @@ Did countries with a higher proportion of billionaires have a higher GDP growth 
 
 We hypothesise that countries with a higher proportion of billionaires don't have a higher GDP growth rate in the early 21th century. And if they do, we suspect a causation instead of a causality.
 
-### Code
+## Code
 
 To answer we used the following code:
+
+### Loading, cleaning and merging the Datasets (GDP and Billionaires)
 
 ```{r}
 # load billionaires dataset
@@ -36,13 +43,14 @@ billionaires_by_country <- billionaires %>%
   group_by(country_of_residence) %>%
   summarise(num_billionaires = n_distinct(full_name))
 
-
-# Load the gdp dataset
+# Load the GDP dataset
 gdp_growth_df <- here("data_prep", "GDP_growth.csv") %>%
   read_csv()
+
 # Sort by year 2021
 gdp_growth_2021 <- gdp_growth_df %>%
   filter(Year == 2021)
+
 #rename columns "Entity" and "17.13.1 - Annual GDP growth (%) - NY_GDP_MKTP_KD_ZG"
 gdp_growth_2021 <- gdp_growth_2021 %>%
   rename(country_of_residence = Entity) %>%
@@ -51,24 +59,30 @@ gdp_growth_2021 <- gdp_growth_2021 %>%
 # merge the two dataframes
 billionaires_by_country_gdp <- billionaires_by_country %>%
   left_join(gdp_growth_2021, by = "country_of_residence")
+
 # remove the NA from the dataset
 billionaires_by_country_gdp <- billionaires_by_country_gdp %>%
   drop_na()
+```
 
+### Create a Graph
+```{r, eval=FALSE}
 # create a regression plot comparing the gdp of each country with the number of billionaires. the x axis should state each country's name, the names should be rotated, so the plot is readable.
 ggplot(billionaires_by_country_gdp, aes(x = reorder(country_of_residence, -num_billionaires), y = num_billionaires)) +
   geom_point(aes(color = gdp_growth_country), size = 3) +
   scale_color_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 0) +
   labs(x = "Country", y = "Number of Billionaires", title = "Number of Billionaires by Country and GDP") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
+### Run a regression model
+```{r, eval=FALSE}
 # run a regression model
 Regression_billionaires_gdp <- lm(gdp_growth_country ~ num_billionaires, data = billionaires_by_country_gdp)
 summary(Regression_billionaires_gdp)
-        
 ```
 
 
-### Results
+## Results
 
-### Discussion
+## Discussion
